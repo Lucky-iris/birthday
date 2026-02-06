@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Birthday My Love ❤️</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  height:100vh;
+  overflow:hidden;
+  font-family:"Segoe UI",sans-serif;
+  background:radial-gradient(circle at top,#ffb3c6,#ff4d6d);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:white;
+}
+
+/* Floating hearts background */
+.heart{
+  position:fixed;
+  bottom:-20px;
+  font-size:20px;
+  animation:float 6s linear infinite;
+  opacity:.8;
+}
+
+@keyframes float{
+  to{
+    transform:translateY(-110vh) translateX(50px);
+    opacity:0;
+  }
+}
+
+/* Container */
+.container{
+  text-align:center;
+  z-index:2;
+}
+
+h1{
+  font-size:3.5em;
+  margin-bottom:10px;
+  animation:fadeIn 2s ease;
+}
+
+h2{
+  font-weight:300;
+  margin-bottom:30px;
+  animation:fadeIn 3s ease;
+}
+
+/* Cake */
+.cake{
+  width:200px;
+  margin:auto;
+}
+.layer{
+  height:45px;
+  border-radius:12px;
+  margin-bottom:6px;
+  transition:1s;
+}
+.top{background:#ffd6e0}
+.mid{background:#ff8fab}
+.bot{background:#ff4d6d}
+
+.candle{
+  width:10px;
+  height:30px;
+  background:white;
+  margin:auto;
+  position:relative;
+}
+.flame{
+  width:12px;
+  height:18px;
+  background:orange;
+  border-radius:50%;
+  position:absolute;
+  top:-18px;
+  left:-1px;
+  animation:flicker .3s infinite alternate;
+}
+
+@keyframes flicker{to{transform:scale(.8)}}
+
+.cake.cut .top{transform:translateX(-40px)}
+.cake.cut .mid{transform:translateX(40px)}
+.cake.cut .bot{transform:translateY(10px)}
+
+button{
+  margin-top:20px;
+  padding:14px 30px;
+  font-size:1em;
+  border:none;
+  border-radius:30px;
+  background:#fff;
+  color:#ff4d6d;
+  cursor:pointer;
+}
+
+/* Gift box */
+#gift{
+  font-size:80px;
+  opacity:0;
+  transform:scale(.3);
+  transition:1s;
+  margin-top:20px;
+  cursor:pointer;
+}
+#gift.show{
+  opacity:1;
+  transform:scale(1);
+}
+
+/* Love letter */
+#letter{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.75);
+  justify-content:center;
+  align-items:center;
+  z-index:5;
+}
+
+.letter-box{
+  background:white;
+  color:#333;
+  padding:30px;
+  border-radius:20px;
+  max-width:380px;
+  text-align:center;
+  animation:pop .6s ease;
+}
+
+@keyframes pop{
+  from{transform:scale(.5)}
+  to{transform:scale(1)}
+}
+
+.final{
+  margin-top:15px;
+  font-weight:bold;
+  color:#ff4d6d;
+}
+
+/* Animations */
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(20px)}
+  to{opacity:1; transform:translateY(0)}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>🎉 Happy Birthday My Love ❤️</h1>
+  <h2>You make my world beautiful 💖</h2>
+
+  <div class="cake" id="cake">
+    <div class="candle"><div class="flame" id="flame"></div></div>
+    <div class="layer top"></div>
+    <div class="layer mid"></div>
+    <div class="layer bot"></div>
+  </div>
+
+  <button onclick="cutCake()">🎂 Cut the Cake</button>
+
+  <div id="gift" onclick="openGift()">🎁</div>
+</div>
+
+<!-- Love Letter -->
+<div id="letter">
+  <div class="letter-box">
+    <h2>💖 My Love 💖</h2>
+    <p>
+      The day you came into my life,  
+      everything felt lighter, warmer, and more meaningful.  
+      You changed my world without even trying.
+    </p>
+    <p>
+      Your smile became my favorite view,  
+      your voice my comfort,  
+      and your presence my peace.
+    </p>
+    <p class="final">
+      I’m truly happy you came into my life ❤️
+    </p>
+  </div>
+</div>
+
+<script>
+/* Floating hearts */
+setInterval(()=>{
+  const h=document.createElement("div");
+  h.className="heart";
+  h.innerHTML=["❤️","💖","💘","💕"][Math.floor(Math.random()*4)];
+  h.style.left=Math.random()*100+"vw";
+  h.style.fontSize=15+Math.random()*20+"px";
+  h.style.animationDuration=4+Math.random()*3+"s";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),7000);
+},300);
+
+/* Mic candle blow */
+navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
+  const ctx=new AudioContext();
+  const mic=ctx.createMediaStreamSource(stream);
+  const analyser=ctx.createAnalyser();
+  mic.connect(analyser);
+  const data=new Uint8Array(analyser.frequencyBinCount);
+
+  function detect(){
+    analyser.getByteFrequencyData(data);
+    let volume=data.reduce((a,b)=>a+b)/data.length;
+    if(volume>55) flame.style.display="none";
+    requestAnimationFrame(detect);
+  }
+  detect();
+});
+
+/* Cake & Gift */
+function cutCake(){
+  cake.classList.add("cut");
+  setTimeout(()=>{
+    gift.classList.add("show");
+  },1200);
+}
+
+function openGift(){
+  letter.style.display="flex";
+}
+</script>
+
+</body>
+</html>
